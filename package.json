@@ -14,7 +14,7 @@
     "dev": "wp-scripts start",
     "build": "wp-scripts build",
     "lint:php": "composer lint",
-    "lint:js": "wp-scripts lint-js js/src",
+    "lint:js": "wp-scripts lint-js assets/js/src",
     "test": "composer test -- --no-coverage",
     "test:coverage": "composer test",
     "report-coverage": "composer coverage"
