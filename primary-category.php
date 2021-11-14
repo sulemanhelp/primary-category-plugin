@@ -7,11 +7,16 @@
  * Author URI: https://suleman-help.me
  * Text Domain: primary-category
  *
+ * @package PrimaryCategory
  */
 
 namespace Suleman\PrimaryCategory;
 
-// site-level autoloading.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
+// site-level auto-loading.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 }
