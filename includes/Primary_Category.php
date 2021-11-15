@@ -77,10 +77,20 @@ class Primary_Category {
 
 		if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 			require $this->dir . '/admin/Primary_Category_Admin.php';
-			$this->admin = new Primary_Category_Admin();
+			$this->admin = new Primary_Category_Admin( $this );
 		} else {
-			require $this->dir . '/admin/Primary_Category_Public.php';
-			$this->public = new Primary_Category_Public();
+			/*require $this->dir . '/admin/Primary_Category_Public.php';
+			$this->public = new Primary_Category_Public( $this );*/
 		}
+	}
+
+	/**
+	 * Get the public URL to the asset file.
+	 *
+	 * @param string $path_relative Path relative to this plugin directory root.
+	 * @return string The URL to the asset.
+	 */
+	public function asset_url( $path_relative ) {
+		return plugins_url( $path_relative, $this->file() );
 	}
 }

@@ -11,7 +11,7 @@ module.exports = {
 		editor: './assets/js/src/block-editor.js',
 	},
 	output: {
-		path: path.resolve( __dirname, 'js/dist' ),
+		path: path.resolve( __dirname, 'dist/js' ),
 		filename: '[name].js',
 	},
 };
