@@ -1,9 +1,6 @@
-import { Component, Fragment } from '@wordpress/element';
-//import SPCPicker from './SpcPicker';
+import { Component } from '@wordpress/element';
+import PrimaryCategorySelector from "./category-selector";
 
-/**
- * SPC Init Component
- */
 class PrimaryCategory extends Component {
 	/**
 	 * Renders the component.
@@ -11,24 +8,21 @@ class PrimaryCategory extends Component {
 	 * @returns {ReactElement}
 	 */
 	render() {
-		const { slug, TaxonomyComponent } = this.props;
-		/*const taxonomies = spcData.taxonomies;*/
+		const { ParentComponent } = this.props;
+		const categories = categoryData.categories;
 
-		//if ( ! taxonomies.hasOwnProperty( slug ) ) {
+		if ( categories.length > 0 ) {
 			return (
-				<Fragment>
-					<TaxonomyComponent {...this.props} />
-					<h2>Testing</h2>
-				</Fragment>
+				<>
+					<ParentComponent { ...this.props } />
+					<PrimaryCategorySelector Categories={ categories } />
+				</>
 			);
-		//}
+		}
 
-		/*return (
-			<Fragment>
-				<TaxonomyComponent {...this.props} />
-				<SPCPicker primaryTaxonomy={ taxonomies[slug] } />
-			</Fragment>
-		);*/
+		return (
+			<ParentComponent { ...this.props } />
+		);
 	}
 }
 
