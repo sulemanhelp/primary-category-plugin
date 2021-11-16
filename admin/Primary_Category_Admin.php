@@ -34,7 +34,6 @@ class Primary_Category_Admin {
 	 */
 	public function register_hooks() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_script' ), 10, 1 );
-		add_action( 'save_post', array( $this, 'save_term' ), 10, 2 );
 	}
 
 	/**
@@ -58,9 +57,9 @@ class Primary_Category_Admin {
 		}
 
 		$asset_file = include( $this->main->dir() . '/dist/js/editor.asset.php' );
-		global $post;
-		$selectedId = isset( $post->ID ) ? get_post_meta( $post->ID, 'post_primary_category', true ) : -1;
-		$selectedId = $selectedId !== 0 && empty( $selectedId ) ? -1 : $selectedId;
+		global $post, $wp_taxonomies;
+		$selectedId = isset( $post->ID ) ? get_post_meta( $post->ID, 'post_primary_category', true ) : 0;
+		$selectedId = $selectedId !== 0 && empty( $selectedId ) ? 0 : $selectedId;
 
 		// Register the script
 		wp_register_script(
@@ -77,22 +76,9 @@ class Primary_Category_Admin {
 			'gutenberg-primary-category-option-js',
 			'categoryData',
 			array(
-				'categories' => array_map( array( $this, 'get_categories_js' ), $post_categories ),
 				'selectedPrimaryCategory' => $selectedId,
+				'categoryRestBase' => $wp_taxonomies['category']->rest_base,
 			)
-		);
-	}
-
-	/**
-	 * Convert category data for JS in array.
-	 *
-	 * @param WP_Taxonomy $cat - WP Taxonomy object.
-	 * @return array
-	 */
-	public function get_categories_js( $cat ) {
-		return array(
-			'id'   => $cat->term_id,
-			'name' => $cat->name,
 		);
 	}
 

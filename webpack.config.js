@@ -8,7 +8,8 @@ const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 module.exports = {
 	...defaultConfig,
 	entry: {
-		editor: './assets/js/src/block-editor.js',
+		'block-editor': './assets/js/src/block-editor.js',
+		'primary-category-posts': './assets/js/src/primary-category-posts.js',
 	},
 	output: {
 		path: path.resolve( __dirname, 'dist/js' ),

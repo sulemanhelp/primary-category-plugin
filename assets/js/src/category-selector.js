@@ -1,83 +1,105 @@
 import { Component } from '@wordpress/element';
-import { withSelect, withDispatch } from '@wordpress/data';
+import { SelectControl } from '@wordpress/components';
+import { withSelect, withDispatch, useSelect, store as coreStore } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { __ } from "@wordpress/i18n";
+import styled from 'styled-components'
+
+const Title = styled.strong`
+  font-size: 1.2em;
+  display: block;
+  margin: 10px 0;
+`;
 
 class PrimaryCategorySelector extends Component {
 	constructor() {
 		super();
 
 		this.state = {
-			terms: null,
-			primaryTermId: 0
+			primaryCat: 0
 		}
 	}
 
+
+
 	/**
-	 * SPC selector onChange event handler.
+	 * Get categories when component mounts.
 	 *
-	 * @param {object} event Event object.
+	 */
+	componentDidMount() {
+		// Set the primary category id.
+		this.setState( {
+			primaryCat: this.props.SelectedPrimaryCategory,
+		} );
+	}
+
+
+	/**
+	 * onChange event handler for select tag.
+	 *
+	 * @param {Object} event Event object.
+	 *
 	 */
 	onSelectChange( event ) {
-		const metaObj = {};
-		metaObj.post_primary_category = parseInt( event.target.value, 10 );
-		this.props.updateSPC( metaObj );
-		this.setState( { primaryTermId: event.target.value } );
+		const postMeta = {};
+		postMeta.post_primary_category = parseInt( event, 10 );
+
+		// Update post meta for saving selected value.
+		this.props.updateMeta( postMeta );
+
+		// Update the state for primary category id.
+		this.setState( { primaryCat: event } );
 	}
 
 	/**
-	 * Renders the SPCPicker component.
+	 * Renders the component.
 	 *
-	 * @returns {ReactElement}
+	 * @return {ReactElement}
 	 */
 	render() {
-		const {
-			primaryTaxonomy,
-			selectedTermsIds
-		} = this.props;
+		const { selectedCatIds, categories } = this.props;
+		const catSelections = [];
+		catSelections.push( { label: __( 'Select Primary Category', 'primary-category' ), value: -1 } );
+
+		if ( categories ) {
+			categories.map( ( cat ) => {
+				if ( selectedCatIds.includes( cat.id ) ) {
+					catSelections.push( {label: cat.name, value: cat.id} );
+				}
+			} );
+		}
 
 		return (
 			<>
-				<h4>
-					{ __( 'Primary Category', 'simple-primary-category' ) }
-				</h4>
-				<select onChange={ this.onSelectChange.bind( this ) }>
-					<option value="-1">
-						{ __( 'Select Primary Category', 'simple-primary-category' ) }
-					</option>
-					{ this.state.terms && this.state.terms.map( term => {
-						if ( selectedTermsIds.includes( term.id ) ) {
-							if ( this.state.primaryTermId === term.id ) {
-								return (
-									<option value={term.id} selected>{term.name}</option>
-								)
-							}
-							return (
-								<option value={term.id}>{term.name}</option>
-							)
-						}
-					}) }
-				</select>
+				<SelectControl
+					label={ <Title>{ __( 'Primary Category', 'primary-category' ) }</Title> }
+					help={ __( 'Select a category to make it primary category.', 'primary-category' ) }
+					options={ catSelections }
+					value={ this.state.primaryCat }
+					onChange={ this.onSelectChange.bind(this) }
+				/>
 			</>
 		);
 	}
 }
 
 export default compose( [
-	withSelect( ( select, { primaryTaxonomy } ) => {
+	withSelect( ( select, { CategoryRestBase } ) => {
 		const { getEditedPostAttribute } = select( 'core/editor' );
+		const { getEntityRecords } = select( 'core' );
 
 		return {
-			selectedTermsIds: getEditedPostAttribute( primaryTaxonomy.restBase ),
-			meta: getEditedPostAttribute( 'meta' )
+			selectedCatIds: getEditedPostAttribute( CategoryRestBase ),
+			meta: getEditedPostAttribute( 'meta' ),
+			categories: getEntityRecords('taxonomy', 'category')
 		}
 	}),
 	withDispatch( dispatch => {
 		const { editPost } = dispatch( 'core/editor' );
 
 		return {
-			updateSPC( newMeta ) {
-				editPost( { meta: newMeta } );
+			updateMeta ( postMeta ) {
+				editPost( { meta: postMeta } );
 			}
 		}
 	})

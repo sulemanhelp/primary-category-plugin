@@ -9,19 +9,13 @@ class PrimaryCategory extends Component {
 	 */
 	render() {
 		const { ParentComponent } = this.props;
-		const categories = categoryData.categories;
-
-		if ( categories.length > 0 ) {
-			return (
-				<>
-					<ParentComponent { ...this.props } />
-					<PrimaryCategorySelector Categories={ categories } />
-				</>
-			);
-		}
+		const { categoryRestBase, selectedPrimaryCategory} = categoryData;
 
 		return (
-			<ParentComponent { ...this.props } />
+			<>
+				<ParentComponent { ...this.props } />
+				<PrimaryCategorySelector CategoryRestBase={ categoryRestBase } SelectedPrimaryCategory={ selectedPrimaryCategory }  />
+			</>
 		);
 	}
 }

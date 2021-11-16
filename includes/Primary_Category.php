@@ -49,7 +49,13 @@ class Primary_Category {
 	public function __construct( $plugin_file_path ) {
 		$this->file        = $plugin_file_path;
 		$this->dir         = dirname( $plugin_file_path );
-		$this->init();
+
+		if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
+			require $this->dir . '/admin/Primary_Category_Admin.php';
+			$this->admin = new Primary_Category_Admin( $this );
+		}
+
+		add_action( 'init', array( $this, 'init' ), 10, 1 );
 	}
 
 	/**
@@ -71,17 +77,23 @@ class Primary_Category {
 	}
 
 	/**
-	 *  Initialize Classes.
+	 *  Initialization.
 	 */
-	protected function init() {
+	public function init() {
+		$this->register_meta();
+		$this->enqueue_block_js_assets();
+		$this->register_block();
+	}
 
-		if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
-			require $this->dir . '/admin/Primary_Category_Admin.php';
-			$this->admin = new Primary_Category_Admin( $this );
-		} else {
-			/*require $this->dir . '/admin/Primary_Category_Public.php';
-			$this->public = new Primary_Category_Public( $this );*/
-		}
+	/**
+	 * register over postmeta.
+	 */
+	protected function register_meta() {
+		register_meta( 'post', 'post_primary_category', array(
+			'show_in_rest' => true,
+			'single' => true,
+			'type' => 'integer',
+		) );
 	}
 
 	/**
@@ -92,5 +104,65 @@ class Primary_Category {
 	 */
 	public function asset_url( $path_relative ) {
 		return plugins_url( $path_relative, $this->file() );
+	}
+
+	/**
+	* Enqueue private category block javascript
+	*/
+	public function enqueue_block_js_assets() {
+		// automatically load dependencies and version.
+		$asset_file = include( $this->dir() . '/dist/js/primary-category-posts.asset.php' );
+
+		wp_register_script(
+			'private-category-blocks-js',
+			$this->asset_url( 'dist/js/primary-category-posts.js' ),
+			$asset_file['dependencies'],
+			$asset_file['version']
+		);
+	}
+
+	/**
+	 * Register block for gutenberg use.
+	 */
+	protected function register_block() {
+		register_block_type(
+			'gutenberg-private-category-blocks/private-category',
+			array(
+				'api_version'     => 2,
+				'editor_script'   => 'private-category-blocks-js',
+				'attributes'      =>
+					array(
+						'category' =>
+							array(
+								'type'    => 'integer',
+								'default' => 0,
+							),
+						'postType' =>
+							array(
+								'type'    => 'string',
+								'default' => 'post',
+							),
+					),
+				'render_callback' =>
+					array(
+						$this,
+						'render_callback',
+					),
+			)
+		);
+	}
+
+	/**
+	 * Render Block HTML for both editor and front-end
+	 *
+	 * @param array  $block_attributes Block attributes values.
+	 * @param string $content Content.
+	 *
+	 * @return string
+	 */
+	public function render_callback( $block_attributes, $content ) {
+		require $this->dir . '/public/Primary_Category_Public.php';
+		$this->public = new Primary_Category_Public( $this );
+		return $this->public->render( $block_attributes, $content );
 	}
 }
