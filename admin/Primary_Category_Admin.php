@@ -15,7 +15,7 @@ namespace Suleman\PrimaryCategory;
 class Primary_Category_Admin {
 
 	/**
-	 * object of Primary_Category class.
+	 * Object of Primary_Category class.
 	 *
 	 * @var Primary_Category
 	 */
@@ -23,6 +23,8 @@ class Primary_Category_Admin {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param Primary_Category $main - Reference to main object.
 	 */
 	public function __construct( $main ) {
 		$this->main = $main;
@@ -52,10 +54,10 @@ class Primary_Category_Admin {
 
 		$asset_file = include( $this->main->dir() . '/dist/js/editor.asset.php' );
 		global $post, $wp_taxonomies;
-		$selectedId = isset( $post->ID ) ? get_post_meta( $post->ID, 'post_primary_category', true ) : 0;
-		$selectedId = $selectedId !== 0 && empty( $selectedId ) ? 0 : $selectedId;
+		$selected_id = isset( $post->ID ) ? get_post_meta( $post->ID, 'post_primary_category', true ) : 0;
+		$selected_id = 0 !== $selected_id && empty( $selected_id ) ? 0 : $selected_id;
 
-		// Register the script
+		// Register the script.
 		wp_register_script(
 			'gutenberg-primary-category-option-js',
 			$this->main->asset_url( 'dist/js/editor.js' ),
@@ -70,8 +72,8 @@ class Primary_Category_Admin {
 			'gutenberg-primary-category-option-js',
 			'categoryData',
 			array(
-				'selectedPrimaryCategory' => $selectedId,
-				'categoryRestBase' => $wp_taxonomies['category']->rest_base,
+				'selectedPrimaryCategory' => $selected_id,
+				'categoryRestBase'        => $wp_taxonomies['category']->rest_base,
 			)
 		);
 	}

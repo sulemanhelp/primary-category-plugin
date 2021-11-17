@@ -47,8 +47,8 @@ class Primary_Category {
 	 * @param string $plugin_file_path Absolute path to the main plugin file.
 	 */
 	public function __construct( $plugin_file_path ) {
-		$this->file        = $plugin_file_path;
-		$this->dir         = dirname( $plugin_file_path );
+		$this->file = $plugin_file_path;
+		$this->dir  = dirname( $plugin_file_path );
 
 		if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 			require $this->dir . '/admin/Primary_Category_Admin.php';
@@ -86,14 +86,18 @@ class Primary_Category {
 	}
 
 	/**
-	 * register over postmeta.
+	 * Register over postmeta.
 	 */
 	protected function register_meta() {
-		register_meta( 'post', 'post_primary_category', array(
-			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'integer',
-		) );
+		register_meta(
+			'post',
+			'post_primary_category',
+			array(
+				'show_in_rest' => true,
+				'single'       => true,
+				'type'         => 'integer',
+			)
+		);
 	}
 
 	/**
@@ -107,10 +111,10 @@ class Primary_Category {
 	}
 
 	/**
-	* Enqueue private category block javascript
-	*/
+	 * Enqueue private category block javascript.
+	 */
 	public function enqueue_block_js_assets() {
-		// automatically load dependencies and version.
+		// Automatically load dependencies and version.
 		$asset_file = include( $this->dir() . '/dist/js/primary-category-posts.asset.php' );
 
 		wp_register_script(
@@ -131,7 +135,7 @@ class Primary_Category {
 			'private-category-blocks-js',
 			'categoryBlockData',
 			array(
-				'postTypesWithCategory' => $this->get_post_types()
+				'postTypesWithCategory' => $this->get_post_types(),
 			)
 		);
 	}
@@ -141,24 +145,33 @@ class Primary_Category {
 	 *
 	 * @return array
 	 */
-	public function get_post_types(){
+	public function get_post_types() {
 		global $wp_taxonomies;
 		$types = $wp_taxonomies['category']->object_type;
-		$ret = array();
+		$ret   = array();
 
 		foreach ( $types as $type ) {
-			$type = get_post_type_object($type);
-			$ret[] = array( 'label' => $type->label, 'value' => $type->name);
+			$type  = get_post_type_object( $type );
+			$ret[] = array(
+				'label' => $type->label,
+				'value' => $type->name,
+			);
 		}
 
 		return $ret;
 	}
 
-	public function get_categories(){
+	/**
+	 * Get post types from category association.
+	 */
+	public function get_categories() {
 		$categories = get_categories();
-		$ret = array();
+		$ret        = array();
 		foreach ( $categories as $category ) {
-			$ret[] = array( 'label' => $category->name, 'value' => $category->term_id);
+			$ret[] = array(
+				'label' => $category->name,
+				'value' => $category->term_id,
+			);
 		}
 	}
 
@@ -178,7 +191,7 @@ class Primary_Category {
 								'type'    => 'integer',
 								'default' => 0,
 							),
-						'postType' =>
+						'postType'         =>
 							array(
 								'type'    => 'string',
 								'default' => 'post',
@@ -202,7 +215,7 @@ class Primary_Category {
 	 * @return string
 	 */
 	public function render_callback( $block_attributes, $content ) {
-		if ( $this->public === null ) {
+		if ( null === $this->public ) {
 			require $this->dir . '/public/Primary_Category_Public.php';
 			$this->public = new Primary_Category_Public( $this );
 		}
