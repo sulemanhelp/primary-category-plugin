@@ -2,8 +2,6 @@ import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import Edit from './primary-category-edit-function';
 
-
-
 registerBlockType( 'gutenberg-private-category-blocks/primary-category', {
 	apiVersion: 2,
 	title: __('Posts with private categories', 'primary-category'),
@@ -19,6 +17,5 @@ registerBlockType( 'gutenberg-private-category-blocks/primary-category', {
 			default: 'post'
 		},
 	},
-
 	edit: Edit,
 } );

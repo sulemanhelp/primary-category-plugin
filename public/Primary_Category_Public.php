@@ -43,7 +43,7 @@ class Primary_Category_Public {
 			'meta_query' => array(
 				array(
 					'key'     => 'post_primary_category',
-					'value'   => $attributes['category']
+					'value'   => $attributes['selectedCategory']
 				),
 			),
 			'update_post_term_cache' => false,

@@ -131,8 +131,7 @@ class Primary_Category {
 			'private-category-blocks-js',
 			'categoryBlockData',
 			array(
-				'postTypesWithCategory' => $this->get_post_types(),
-				//'allCategories' => $this->get_categories(),
+				'postTypesWithCategory' => $this->get_post_types()
 			)
 		);
 	}

@@ -10,7 +10,6 @@ function Edit(props) {
 	const blockProps = useBlockProps();
 	const postTypeOptions = categoryBlockData.postTypesWithCategory;
 	const { attributes, name } = props;
-	console.log(attributes);
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>

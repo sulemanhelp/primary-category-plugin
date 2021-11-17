@@ -1,7 +1,7 @@
 import { Component } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import { SelectControl } from '@wordpress/components';
-import {__} from "@wordpress/i18n";
+import { __ } from "@wordpress/i18n";
 import { withSelect } from '@wordpress/data';
 
 class AllCategories extends Component {
@@ -15,7 +15,7 @@ class AllCategories extends Component {
 		const { setAttributes, categories } = this.props;
 		const { selectedCategory } = this.props.attributes;
 		const categoriesList = [];
-		console.log(electedCategory);
+		console.log(selectedCategory);
 		if ( categories ) {
 			categories.map( ( category ) => {
 				categoriesList.push( {
@@ -30,7 +30,7 @@ class AllCategories extends Component {
 				help={ __('Select the primary category for posts you want to list.', 'primary-category') }
 				options={ categoriesList }
 				value={ selectedCategory }
-				onChange={ (newval) => setAttributes({ selectedCategory: newval }) }
+				onChange={ (newval) => setAttributes({ selectedCategory: parseInt( newval, 10 ) }) }
 			/>
 		)
 	}
@@ -42,5 +42,5 @@ export default compose( [
 		return {
 			categories: getEntityRecords('taxonomy', 'category') // if categories are more then hundred then need to index them.
 		}
-	})
+	} )
 ] )( AllCategories );
