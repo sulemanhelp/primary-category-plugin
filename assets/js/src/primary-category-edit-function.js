@@ -8,6 +8,7 @@ import AllCategories from './primary-category-block-list-categories';
 
 function Edit(props) {
 	const blockProps = useBlockProps();
+	// eslint-disable-next-line no-undef
 	const postTypeOptions = categoryBlockData.postTypesWithCategory;
 	const { attributes, name } = props;
 	return (

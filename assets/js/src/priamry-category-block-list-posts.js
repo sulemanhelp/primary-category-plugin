@@ -7,7 +7,7 @@ class PostTypesWithCategory extends Component {
 	/**
 	 * Renders the component.
 	 *
-	 * @returns {ReactElement}
+	 * @return {Object} Render select post type component.
 	 */
 	render() {
 		const { postTypeOptions, setAttributes } = this.props;

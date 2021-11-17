@@ -1,6 +1,6 @@
 import { Component } from '@wordpress/element';
 import { SelectControl } from '@wordpress/components';
-import { withSelect, withDispatch, useSelect, store as coreStore } from '@wordpress/data';
+import { withSelect, withDispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { __ } from "@wordpress/i18n";
 import styled from 'styled-components'
@@ -54,7 +54,7 @@ class PrimaryCategorySelector extends Component {
 	/**
 	 * Renders the component.
 	 *
-	 * @return {ReactElement}
+	 * @return {Object} Render select category component
 	 */
 	render() {
 		const { selectedCatIds, categories } = this.props;
@@ -62,23 +62,21 @@ class PrimaryCategorySelector extends Component {
 		catSelections.push( { label: __( 'Select Primary Category', 'primary-category' ), value: -1 } );
 
 		if ( categories ) {
-			categories.map( ( cat ) => {
+			categories.forEach( ( cat ) => {
 				if ( selectedCatIds.includes( cat.id ) ) {
-					catSelections.push( {label: cat.name, value: cat.id} );
+					return catSelections.push( {label: cat.name, value: cat.id} );
 				}
 			} );
 		}
 
 		return (
-			<>
-				<SelectControl
-					label={ <Title>{ __( 'Primary Category', 'primary-category' ) }</Title> }
-					help={ __( 'Select a category to make it primary category.', 'primary-category' ) }
-					options={ catSelections }
-					value={ this.state.primaryCat }
-					onChange={ this.onSelectChange.bind(this) }
-				/>
-			</>
+			<SelectControl
+				label={ <Title>{ __( 'Primary Category', 'primary-category' ) }</Title> }
+				help={ __( 'Select a category to make it primary category.', 'primary-category' ) }
+				options={ catSelections }
+				value={ this.state.primaryCat }
+				onChange={ this.onSelectChange.bind(this) }
+			/>
 		);
 	}
 }

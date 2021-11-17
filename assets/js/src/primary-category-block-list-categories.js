@@ -9,15 +9,15 @@ class AllCategories extends Component {
 	/**
 	 * Renders the component.
 	 *
-	 * @returns {ReactElement}
+	 * @return {Object} Render select category component.
 	 */
 	render() {
 		const { setAttributes, categories } = this.props;
 		const { selectedCategory } = this.props.attributes;
 		const categoriesList = [];
-		console.log(selectedCategory);
+
 		if ( categories ) {
-			categories.map( ( category ) => {
+			categories.forEach( ( category ) => {
 				categoriesList.push( {
 					'label': category.name,
 					'value': category.id

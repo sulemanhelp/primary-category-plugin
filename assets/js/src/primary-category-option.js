@@ -5,10 +5,11 @@ class PrimaryCategory extends Component {
 	/**
 	 * Renders the component.
 	 *
-	 * @returns {ReactElement}
+	 * @return {Object} Render taxonomies component.
 	 */
 	render() {
 		const { ParentComponent } = this.props;
+		// eslint-disable-next-line no-undef
 		const { categoryRestBase, selectedPrimaryCategory} = categoryData;
 
 		return (

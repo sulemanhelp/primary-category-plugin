@@ -3,6 +3,8 @@ import PrimaryCategory from './primary-category-option';
 
 /**
  * Add component to Gutenberg post taxonomies component.
+ *
+ * @param {Object} PostTaxonomiesComponent post taxonomies component.
  */
 function addPrimaryCategoryComponent( PostTaxonomiesComponent ) {
 	return ( props ) => {
