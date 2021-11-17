@@ -91,7 +91,7 @@ export default compose( [
 		return {
 			selectedCatIds: getEditedPostAttribute( CategoryRestBase ),
 			meta: getEditedPostAttribute( 'meta' ),
-			categories: getEntityRecords('taxonomy', 'category')
+			categories: getEntityRecords('taxonomy', 'category') // if categories are more then hundred then need to index them.
 		}
 	}),
 	withDispatch( dispatch => {

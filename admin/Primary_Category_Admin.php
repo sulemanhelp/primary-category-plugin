@@ -50,12 +50,6 @@ class Primary_Category_Admin {
 			return;
 		}
 
-		$post_categories = get_categories();
-
-		if ( empty( $post_categories ) ) {
-			return;
-		}
-
 		$asset_file = include( $this->main->dir() . '/dist/js/editor.asset.php' );
 		global $post, $wp_taxonomies;
 		$selectedId = isset( $post->ID ) ? get_post_meta( $post->ID, 'post_primary_category', true ) : 0;

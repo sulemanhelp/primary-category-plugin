@@ -119,6 +119,48 @@ class Primary_Category {
 			$asset_file['dependencies'],
 			$asset_file['version']
 		);
+
+		$this->localize_block_required_data();
+	}
+
+	/**
+	 * Localize variables for primary category block
+	 */
+	public function localize_block_required_data() {
+		wp_localize_script(
+			'private-category-blocks-js',
+			'categoryBlockData',
+			array(
+				'postTypesWithCategory' => $this->get_post_types(),
+				//'allCategories' => $this->get_categories(),
+			)
+		);
+	}
+
+	/**
+	 * Return CPT with 'Category' taxonomy.
+	 *
+	 * @return array
+	 */
+	public function get_post_types(){
+		global $wp_taxonomies;
+		$types = $wp_taxonomies['category']->object_type;
+		$ret = array();
+
+		foreach ( $types as $type ) {
+			$type = get_post_type_object($type);
+			$ret[] = array( 'label' => $type->label, 'value' => $type->name);
+		}
+
+		return $ret;
+	}
+
+	public function get_categories(){
+		$categories = get_categories();
+		$ret = array();
+		foreach ( $categories as $category ) {
+			$ret[] = array( 'label' => $category->name, 'value' => $category->term_id);
+		}
 	}
 
 	/**
@@ -126,13 +168,13 @@ class Primary_Category {
 	 */
 	protected function register_block() {
 		register_block_type(
-			'gutenberg-private-category-blocks/private-category',
+			'gutenberg-private-category-blocks/primary-category',
 			array(
 				'api_version'     => 2,
 				'editor_script'   => 'private-category-blocks-js',
 				'attributes'      =>
 					array(
-						'category' =>
+						'selectedCategory' =>
 							array(
 								'type'    => 'integer',
 								'default' => 0,
@@ -161,8 +203,10 @@ class Primary_Category {
 	 * @return string
 	 */
 	public function render_callback( $block_attributes, $content ) {
-		require $this->dir . '/public/Primary_Category_Public.php';
-		$this->public = new Primary_Category_Public( $this );
+		if ( $this->public === null ) {
+			require $this->dir . '/public/Primary_Category_Public.php';
+			$this->public = new Primary_Category_Public( $this );
+		}
 		return $this->public->render( $block_attributes, $content );
 	}
 }
