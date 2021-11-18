@@ -32,9 +32,10 @@ class Primary_Category_Public {
 	 * Constructor.
 	 *
 	 * @param Primary_Category $main Reference to parent object.
+	 * @param WP_Query         $wp_query WP_Query object.
 	 */
 	public function __construct( $main, $wp_query = null ) {
-		$this->main = $main;
+		$this->main  = $main;
 		$this->query = $wp_query ? $wp_query : new \WP_Query();
 	}
 
@@ -61,7 +62,7 @@ class Primary_Category_Public {
 		);
 
 		$this->query->query( $args );
-		$ret   = '';
+		$ret = '';
 
 		if ( $this->query->have_posts() ) :
 			while ( $this->query->have_posts() ) :

@@ -30,7 +30,7 @@ class TestPrimary_Category extends TestCase {
 
 		WP_Mock::userFunction( 'plugins_url' )
 			->once()
-			->with( '/some/assets.php','/absolute/path/to/plugin.php' )
+			->with( '/some/assets.php', '/absolute/path/to/plugin.php' )
 			->andReturn( '/absolute/path/to/some/assets.php' );
 
 		$plugin = new Primary_Category( '/absolute/path/to/plugin.php' );
@@ -45,14 +45,14 @@ class TestPrimary_Category extends TestCase {
 	 *
 	 * @covers \Suleman\PrimaryCategory\Primary_Category::get_post_types()
 	 */
-	public function test_get_post_types(){
-		$data = new \stdClass();
+	public function test_get_post_types() {
+		$data        = new \stdClass();
 		$data->label = 'Posts';
-		$data->name = 'post';
+		$data->name  = 'post';
 
 		global $wp_taxonomies;
 		$wp_taxonomies = array(
-			'category' => new \stdClass()
+			'category' => new \stdClass(),
 		);
 
 		$wp_taxonomies['category']->object_type = array( 'post' );
@@ -63,19 +63,19 @@ class TestPrimary_Category extends TestCase {
 			->andReturn( $data );
 
 		WP_Mock::userFunction( 'is_admin' )
-		       ->once()
-		       ->withNoArgs()
-		       ->andReturn( false );
+			->once()
+			->withNoArgs()
+			->andReturn( false );
 
 		$expect = array(
 			array(
 				'label' => 'Posts',
 				'value' => 'post',
-			)
+			),
 		);
 
 		$primary_cat = new Primary_Category( '/absolute/path/to/plugin.php' );
-		$result = $primary_cat->get_post_types();
+		$result      = $primary_cat->get_post_types();
 
 		$this->assertEquals( $expect, $result );
 	}

@@ -7,7 +7,7 @@
 
 namespace Suleman\PrimaryCategory;
 
-require dirname(__FILE__) . '/../../public/Primary_Category_Public.php';
+require dirname( __FILE__ ) . '/../../public/Primary_Category_Public.php';
 
 use Mockery;
 use WP_Mock;
@@ -36,15 +36,15 @@ class TestPrimary_Category_Public extends TestCase {
 			->withNoArgs()
 			->andReturn( false );
 
-		$public_class      = new Primary_Category_Public( Mockery::mock( Primary_Category::class ), $wp_query );
-		$result = $public_class->render(
+		$public_class = new Primary_Category_Public( Mockery::mock( Primary_Category::class ), $wp_query );
+		$result       = $public_class->render(
 			array(
 				'postType'         => 'post',
 				'selectedCategory' => 0,
 			),
 			''
 		);
-		$expected = 'No post found';
+		$expected     = 'No post found';
 
 		$this->assertEquals( $expected, $result );
 	}
@@ -75,22 +75,22 @@ class TestPrimary_Category_Public extends TestCase {
 			->withNoArgs();
 
 		WP_Mock::userFunction( 'get_the_permalink' )
-		       ->times( 3 )
-		       ->withNoArgs()
-		       ->andReturn( 'https://example.com/someCatLink' );
+			->times( 3 )
+			->withNoArgs()
+			->andReturn( 'https://example.com/someCatLink' );
 
 		WP_Mock::userFunction( 'get_the_title' )
-		       ->times()
-		       ->withNoArgs()
-		       ->andReturn( 'Some Cat title' );
+			->times()
+			->withNoArgs()
+			->andReturn( 'Some Cat title' );
 
-		$expected = sprintf( '<li><a href="%1$s" title="%2$s">%2$s</a></li>', 'https://example.com/someCatLink', 'Some Cat title' );
+		$expected  = sprintf( '<li><a href="%1$s" title="%2$s">%2$s</a></li>', 'https://example.com/someCatLink', 'Some Cat title' );
 		$expected .= sprintf( '<li><a href="%1$s" title="%2$s">%2$s</a></li>', 'https://example.com/someCatLink', 'Some Cat title' );
 		$expected .= sprintf( '<li><a href="%1$s" title="%2$s">%2$s</a></li>', 'https://example.com/someCatLink', 'Some Cat title' );
-		$expected = '<ul>' . $expected . '</ul>';
+		$expected  = '<ul>' . $expected . '</ul>';
 
-		$public_class      = new Primary_Category_Public( Mockery::mock( Primary_Category::class ), $wp_query );
-		$result = $public_class->render(
+		$public_class = new Primary_Category_Public( Mockery::mock( Primary_Category::class ), $wp_query );
+		$result       = $public_class->render(
 			array(
 				'postType'         => 'post',
 				'selectedCategory' => 1,
