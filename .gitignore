@@ -5,5 +5,4 @@ node_modules/
 phpcs.xml
 phpunit.xml
 vendor/
-tests/
 dist/

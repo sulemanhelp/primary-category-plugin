@@ -22,12 +22,20 @@ class Primary_Category_Public {
 	protected $main;
 
 	/**
+	 * Object of WP_Query class.
+	 *
+	 * @var WP_Query
+	 */
+	protected $query;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Primary_Category $main Reference to parent object.
 	 */
-	public function __construct( $main ) {
+	public function __construct( $main, $wp_query = null ) {
 		$this->main = $main;
+		$this->query = $wp_query ? $wp_query : new \WP_Query();
 	}
 
 	/**
@@ -52,12 +60,12 @@ class Primary_Category_Public {
 			'no_found_rows'          => false,    // Not loading pagination in exercise.
 		);
 
-		$posts = new \WP_Query( $args );
+		$this->query->query( $args );
 		$ret   = '';
 
-		if ( $posts->have_posts() ) :
-			while ( $posts->have_posts() ) :
-				$posts->the_post();
+		if ( $this->query->have_posts() ) :
+			while ( $this->query->have_posts() ) :
+				$this->query->the_post();
 				$ret .= sprintf( '<li><a href="%1$s" title="%2$s">%2$s</a></li>', get_the_permalink(), get_the_title() );
 			endwhile;
 		endif;
