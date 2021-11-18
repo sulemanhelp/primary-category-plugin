@@ -52,7 +52,7 @@ class Primary_Category_Admin {
 			return;
 		}
 
-		$asset_file = include( $this->main->dir() . '/dist/js/editor.asset.php' );
+		$asset_file = include( $this->main->dir() . '/dist/js/block-editor.asset.php' );
 		global $post, $wp_taxonomies;
 		$selected_id = isset( $post->ID ) ? get_post_meta( $post->ID, 'post_primary_category', true ) : 0;
 		$selected_id = 0 !== $selected_id && empty( $selected_id ) ? 0 : $selected_id;
@@ -60,7 +60,7 @@ class Primary_Category_Admin {
 		// Register the script.
 		wp_register_script(
 			'gutenberg-primary-category-option-js',
-			$this->main->asset_url( 'dist/js/editor.js' ),
+			$this->main->asset_url( 'dist/js/block-editor.js' ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true
