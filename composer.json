@@ -1,6 +1,6 @@
 {
   "name": "suleman/private-category-plugin",
-  "description": "Plugin for 10up exercise.",
+  "description": "Plugin for wordpress best practise exercise.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
   "minimum-stability": "dev",
